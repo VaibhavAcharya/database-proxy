@@ -1,4 +1,5 @@
 import { createFactory } from "https://deno.land/x/hono/helper.ts";
+import { cors } from "https://deno.land/x/hono/middleware.ts";
 import { Client } from "https://deno.land/x/postgres/mod.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
 
@@ -10,6 +11,8 @@ export type HonoEnv = {
 const factory = createFactory<HonoEnv>();
 
 const app = factory.createApp();
+
+app.use(cors());
 
 app.post("/api/postgres/query", async (c) => {
   const body = await c.req.json();
