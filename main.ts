@@ -1,7 +1,7 @@
 import { createFactory } from "https://deno.land/x/hono/helper.ts";
 import { cors } from "https://deno.land/x/hono/middleware.ts";
-import { Client } from "https://deno.land/x/postgres/mod.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
+import postgres from 'https://deno.land/x/postgresjs/mod.js'
 
 export type HonoEnv = {
   Bindings: Record<string | number | symbol, never>;
@@ -19,6 +19,7 @@ app.post("/api/postgres/query", async (c) => {
 
   const bodyParseResult = z.object({
     connectionString: z.string(),
+    ca: z.string().optional(),
     query: z.string(),
   }).safeParse(body);
 
@@ -37,15 +38,21 @@ app.post("/api/postgres/query", async (c) => {
   const payload = bodyParseResult.data;
 
   try {
-    const client = new Client(payload.connectionString);
+    const client = postgres(payload.connectionString, {
+      ssl: {
+        rejectUnauthorized: false,
+      }
+    });
 
-    const result = await client.queryArray(payload.query);
+    const result = await client`${payload.query}`;
 
     return c.json({
-      data: result.rows,
+      data: result,
       error: null,
     })
   } catch (error) {
+    console.error(error);
+
     return c.json({
       data: null,
       error: {
