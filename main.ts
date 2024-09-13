@@ -19,7 +19,6 @@ app.post("/api/postgres/query", async (c) => {
 
   const bodyParseResult = z.object({
     connectionString: z.string(),
-    ca: z.string().optional(),
     query: z.string(),
   }).safeParse(body);
 
@@ -38,12 +37,7 @@ app.post("/api/postgres/query", async (c) => {
   const payload = bodyParseResult.data;
 
   try {
-    const client = postgres(payload.connectionString, {
-      ssl: {
-        ca: [payload.ca],
-        rejectUnauthorized: false,
-      }
-    });
+    const client = postgres(payload.connectionString);
 
     const result = await client`${payload.query}`;
 
@@ -59,6 +53,7 @@ app.post("/api/postgres/query", async (c) => {
       error: {
         message: "Error while executing query",
         cause: error,
+        cause_string: JSON.stringify(error),
       },
     }, {
       status: 500,
