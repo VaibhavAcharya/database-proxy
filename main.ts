@@ -40,6 +40,7 @@ app.post("/api/postgres/query", async (c) => {
   try {
     const client = postgres(payload.connectionString, {
       ssl: {
+        ca: [payload.ca],
         rejectUnauthorized: false,
       }
     });
