@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Client } from "pg";
 
 const server = serve({
-  port: 8787,
+  port: 3000,
   fetch: async (request) => {
     const start = performance.now();
 
