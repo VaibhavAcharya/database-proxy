@@ -1,29 +1,20 @@
 {
   "name": "database-proxy",
-  "version": "0.1.0",
-  "private": true,
+  "module": "index.ts",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@vercel/functions": "^1.4.1",
-    "next": "14.2.11",
-    "pg": "^8.12.0",
-    "react": "^18",
-    "react-dom": "^18",
-    "zod": "^3.23.8"
+    "start": "bun run index.ts"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/bun": "latest",
     "@types/pg": "^8.11.10",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.11",
-    "prettier": "^3.3.3",
-    "typescript": "^5"
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "zod": "^3.23.8"
   }
 }
